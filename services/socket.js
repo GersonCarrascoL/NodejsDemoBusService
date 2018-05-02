@@ -1,5 +1,7 @@
 'use strict'
-const crypto = require('crypto'),
+const CourseController = require('../controllers/course-controller'),
+    cc = new CourseController,
+    crypto = require('crypto'),
     util = require('util')
 
 var ioEvents = function(io){
@@ -12,12 +14,20 @@ var azureBusService = function(azure,config){
     var serviceBusService = azure.createServiceBusService(config.SbConnection.AZURE_SERVICEBUS_ACCESS_KEY)
 
     serviceBusService.createQueueIfNotExists('example',function(err){
-        if(err) console.log(err.stack)
-        console.log('El queue example ya existe,token:'+ getSASToken('arqui-demo2','example','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q=')    )
-        
-    
+        if(err){
+            console.log(err.stack)
+        }else{
+            console.log('El queue example ya existe,token:'+ getSASToken('arqui-demo2','example','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q='))
+        }
     })
 
+    serviceBusService.createQueueIfNotExists('getcourses',function(err){
+        if(err){
+            console.log(err.stack)
+        }else{
+            console.log('El queue getcourses ya existe,token:'+ getSASToken('arqui-demo2','getcourses','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q='))
+        }
+    })
     //getSASToken('arqui-demo2','example','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q=')
     function getSASToken(serviceNamespace, entityPath, sasKeyName, sasKey) { 
         var uri = "http://" + serviceNamespace + 
@@ -43,22 +53,18 @@ var azureBusService = function(azure,config){
         }
     }
 
-    serviceBusService.receiveQueueMessage('example',function(err,receivedMessage){
-        if(err) return console.log(err.stack)
-        console.log(JSON.stringify(receivedMessage.body))
+    serviceBusService.receiveQueueMessage('getcourses',{ isPeekLock: true },function(err,receivedMessage){
+        if(!err){
+            console.log(receivedMessage)
+            serviceBusService.deleteMessage(receivedMessage, function (deleteError){
+                if(!deleteError){
+                    console.log('mensaje borrado')
+                }
+            });
+        }else{
+            console.log('Error')
+        }     
     })
-    
-    function sendMessageExample(){
-        var message = {
-            body: 'Test message',
-            customProperties: {
-                testproperty: 'TestValue'
-        }}
-        serviceBusService.sendQueueMessage('example',message,function(err){
-            if(err)return console.log({'message':'Error sending message'})
-            console.log('Message sended')
-        })
-    }
 }
 
 var init = function(app){
