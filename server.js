@@ -14,6 +14,7 @@ const express = require('express'),
 app
     .set('port', port)
 
+    .use(express.static('public'))
     .use(cors())
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({extended: false}))

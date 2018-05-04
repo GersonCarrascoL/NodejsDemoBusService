@@ -1,11 +1,10 @@
 'use strict'
 
-const ExampleModel = require('../models/example-model'),
-    em = new ExampleModel()
+const path = require('path')
 
 class ExampleController{
     index(req, res){
-        return res.send('Node version is: ' + process.version)
+        return res.sendfile(path.resolve('public/index.html'))
     }
 }
 

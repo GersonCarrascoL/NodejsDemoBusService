@@ -10,12 +10,12 @@ const mysql = require('mysql2'),
         database : config.mysql.database,
         ssl : config.mysql.ssl
     },
-    conn = mysql.createConnection(dbOptions)
+    pool = mysql.createPool(dbOptions)
 
-conn.connect( function(err){
+pool.getConnection( function(err){
     return (err)
         ?console.log(`Error al conectar a Mysql : ${err.starck}`)
-        :console.log(`Conexion establecida con Mysql N° : ${conn.threadId}`)
+        :console.log(`Conexion establecida con Mysql`)
 })
 
-module.exports = conn
+module.exports = pool

@@ -4,17 +4,16 @@ const CourseModel = require('../models/course-model'),
     cm = new CourseModel()
 
 class CourseController{
-    getCourses(serviceBusService){
-        cm.getCourses(function(err,data){
-            serviceBusService.sendQueueMessage('getcourses',data,function(err){
-                if(!err){
-                    console.log('Message sended to queue getcourses')
+    getCourses(){
+        return new Promise(function(resolve,reject){
+            cm.getCourses((err,data)=>{
+                if(err){
+                    return reject(err.stack)
                 }else{
-                    console.log('Error sending message')
+                    return resolve(data)
                 }
             })
-        })
-        
+        })    
     }
 }
 
