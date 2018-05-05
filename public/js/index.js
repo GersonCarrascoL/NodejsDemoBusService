@@ -9,6 +9,7 @@ $(document).ready(function(){
 /*function listenerServiceBus(){
     var token = $('.sas').val();
     
+    
     $.ajax({
         url: 'https://arqui-demo2.servicebus.windows.net/example/messages/head',
         method:'DELETE',
