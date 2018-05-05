@@ -6,6 +6,6 @@ const express = require('express'),
     ec = new ExampleController()
 
 router
-    .get('/api/v1/',ec.index)
+    .get('/',ec.index)
 
 module.exports = router

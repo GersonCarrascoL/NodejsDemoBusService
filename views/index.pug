@@ -1,0 +1,25 @@
+html
+  head
+    title!= title
+    link(rel="stylesheet",type="text/css", href="css/styles.css")
+    link(rel="stylesheet", href="css/bootstrap.css")
+  body
+    div.container-fluid
+        input.sas(type="hidden",value=tokenExample)
+        input.sas-entryfood(type="hidden",value=tokenEntryFood)
+        input.sas-food(type="hidden",value=tokenFood)
+        input.sas-dessert(type="hidden",value=tokenDessert)
+        input.sas-drink(type="hidden",value=tokenDrink)
+        div.orders.col-md-12
+            h1!= "PEDIDOS"
+            div.order.order-entryfood.col-md-3
+                h2!= "ENTRADAS"
+            div.order.order-food.col-md-3
+                h2!= "COMIDAS"
+            div.order.order-dessert.col-md-3
+                h2!= "POSTRES"
+            div.order.order-drink.col-md-3
+                h2!= "BEBIDAS"
+    script(src="js/jquery.js")
+    script(src="js/index.js")
+    
